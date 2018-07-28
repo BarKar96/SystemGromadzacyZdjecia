@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "77834139921",
+    "firebase_url": "https://systemgromadzacyzdjecia-cf384.firebaseio.com",
+    "project_id": "systemgromadzacyzdjecia-cf384",
+    "storage_bucket": "systemgromadzacyzdjecia-cf384.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:77834139921:android:fa00ebc8c9da3e06",
+        "android_client_info": {
+          "package_name": "com.example.bartek.systemgromadzacyzdjecia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "77834139921-821nbt2ebd5j35dcfutao0il7fvjb8he.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQXLhsx3PZDbc7Pu9QSPpSdRu_LOswCP0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
