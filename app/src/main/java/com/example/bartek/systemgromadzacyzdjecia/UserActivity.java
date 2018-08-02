@@ -26,11 +26,9 @@ import java.util.UUID;
 public class UserActivity extends AppCompatActivity
 {
 
-    private Button btnChoose, btnUpload;
+    private Button btnChoose, btnUpload, btnBack;
     private ImageView imageView;
-
     private Uri filePath;
-
     private final int PICK_IMAGE_REQUEST = 71;
 
 
@@ -51,6 +49,7 @@ public class UserActivity extends AppCompatActivity
 
         btnChoose = (Button) findViewById(R.id.btnChoose);
         btnUpload = (Button) findViewById(R.id.btnUpload);
+        btnBack = (Button) findViewById(R.id.btnBack);
         imageView = (ImageView) findViewById(R.id.imgView);
 
 
@@ -58,6 +57,12 @@ public class UserActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 chooseImage();
+            }
+        });
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                back();
             }
         });
 
@@ -69,6 +74,11 @@ public class UserActivity extends AppCompatActivity
         });
     }
 
+    private void back()
+    {
+        finish();
+        startActivity(new Intent(getApplicationContext(), PhotoActivity.class));
+    }
 
     private void chooseImage()
     {

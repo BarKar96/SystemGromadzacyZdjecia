@@ -5,19 +5,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
-import org.w3c.dom.Text;
 
 public class PhotoActivity extends AppCompatActivity implements View.OnClickListener
 {
 
     private FirebaseAuth firebaseAuth;
-    private TextView text;
-    private Button buttonLogout;
+    private Button buttonLogout,buttonAddPhoto;
 
 
     @Override
@@ -28,6 +28,8 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
 
         firebaseAuth =  FirebaseAuth.getInstance();
 
+
+
         if (firebaseAuth.getCurrentUser() == null)
         {
             finish();
@@ -37,12 +39,14 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
 
-        text = (TextView) findViewById(R.id.textView2);
+
         buttonLogout = (Button) findViewById(R.id.buttonLogout);
+        buttonAddPhoto = (Button) findViewById(R.id.buttonAddPhoto);
 
         buttonLogout.setOnClickListener(this);
+        buttonAddPhoto.setOnClickListener(this);
 
-        text.setText("hello"+user.getEmail());
+
     }
 
     @Override
@@ -52,6 +56,11 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
             firebaseAuth.signOut();
             finish();
             startActivity(new Intent(this,LoginActivity.class));
+        }
+        if (v == buttonAddPhoto)
+        {
+            finish();
+            startActivity(new Intent(this,UserActivity.class));
         }
     }
 }
