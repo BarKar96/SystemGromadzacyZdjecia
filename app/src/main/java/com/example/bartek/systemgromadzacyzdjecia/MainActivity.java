@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (firebaseAuth.getCurrentUser() != null)
         {
             finish();
-            startActivity(new Intent(getApplicationContext(), PhotoActivity.class));
+            startActivity(new Intent(getApplicationContext(), UserActivity.class));
         }
 
 
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         {
 
                                 finish();
-                                startActivity(new Intent(getApplicationContext(), PhotoActivity.class));
+                                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
 
                         }
                         else
