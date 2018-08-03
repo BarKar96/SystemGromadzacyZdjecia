@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -25,8 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.regex.Pattern;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener
-{
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private Button buttonSignIn;
     private EditText editTextEmail;
     private EditText editTextPassword;
@@ -36,16 +36,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-        if (firebaseAuth.getCurrentUser() != null)
-        {
+        if (firebaseAuth.getCurrentUser() != null) {
             finish();
             startActivity(new Intent(getApplicationContext(), PhotoActivity.class));
         }
@@ -61,65 +60,67 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         databaseReference = FirebaseDatabase.getInstance().getReference();
     }
 
-    private void userLogin()
-    {
+    private void userLogin() {
         final String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
 
-        if (TextUtils.isEmpty(email))
-        {
+        if (TextUtils.isEmpty(email)) {
             Toast.makeText(this, "Please enter email", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(password))
-        {
-            Toast.makeText(this,"Please enter password",Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(password)) {
+            Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
             return;
         }
         progressDialog.setMessage("Logging in...");
         progressDialog.show();
 
-        firebaseAuth.signInWithEmailAndPassword(email,password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
-                {
+        firebaseAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
-                    public void onComplete(@NonNull Task<AuthResult> task)
-                    {
+                    public void onComplete(@NonNull Task<AuthResult> task) {
                         progressDialog.dismiss();
-                        if(task.isSuccessful())
-                        {
+                        if (task.isSuccessful()) {
                             databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     UserState US = dataSnapshot.child("Information").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).getValue(UserState.class);
-                                    if (US.expert)
-                                    {
-
-                                    }
-                                    else
-                                    {
-                                        finish();
+                                    finish();
+                                    if (US.expert) {
+                                        HideKeyboard();
+                                        startActivity(new Intent(getApplicationContext(), ExpertHomeActivity.class));
+                                    } else {
                                         startActivity(new Intent(getApplicationContext(), PhotoActivity.class));
                                     }
                                 }
 
                                 @Override
-                                public void onCancelled(DatabaseError databaseError) {}
+                                public void onCancelled(DatabaseError databaseError) {
+                                }
                             });
                         }
                     }
                 });
     }
 
-    @Override
-    public void onClick(View v)
+    private void HideKeyboard()
     {
-        if (v == buttonSignIn)
-        {
+        InputMethodManager imm = (InputMethodManager) this.getSystemService(this.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = this.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(this);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == buttonSignIn) {
             userLogin();
         }
-        if (v == textViewSignUp)
-        {
+        if (v == textViewSignUp) {
             finish();
             startActivity(new Intent(this, MainActivity.class));
         }
