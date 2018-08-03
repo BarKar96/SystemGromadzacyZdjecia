@@ -31,7 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PhotoActivity extends AppCompatActivity {
+public class PhotoActivity extends AppCompatActivity implements ImageAdapter.OnItemClickListener {
     private RecyclerView mRecyclerView;
     private ImageAdapter mAdapter;
 
@@ -39,6 +39,8 @@ public class PhotoActivity extends AppCompatActivity {
 
     private DatabaseReference mDatabaseRef;
     private List<Upload> mUploads;
+
+    public static Upload upload;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,7 @@ public class PhotoActivity extends AppCompatActivity {
                 mAdapter = new ImageAdapter(PhotoActivity.this, mUploads);
 
                 mRecyclerView.setAdapter(mAdapter);
+                mAdapter.setOnItemClickListener(PhotoActivity.this);
                 mProgressCircle.setVisibility(View.INVISIBLE);
             }
 
@@ -75,5 +78,22 @@ public class PhotoActivity extends AppCompatActivity {
                 mProgressCircle.setVisibility(View.INVISIBLE);
             }
         });
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        upload = mUploads.get(position);
+        finish();
+        startActivity(new Intent(this, PhotoReview.class));
+    }
+
+    @Override
+    public void onWhatEverClick(int position) {
+
+    }
+
+    @Override
+    public void onDeleteClick(int position) {
+
     }
 }

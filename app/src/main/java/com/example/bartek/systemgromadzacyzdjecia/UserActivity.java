@@ -37,12 +37,13 @@ public class UserActivity extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
 
     private Button mButtonChooseImage;
+    private Button mButtonLogout;
     private Button mButtonUpload;
     private TextView mTextViewShowUploads;
     private EditText mEditTextFileName;
     private ImageView mImageView;
     private ProgressBar mProgressBar;
-
+    private FirebaseAuth firebaseAuth;
     private Uri mImageUri;
 
     private StorageReference mStorageRef;
@@ -61,6 +62,7 @@ public class UserActivity extends AppCompatActivity {
         mEditTextFileName = findViewById(R.id.edit_text_file_name);
         mImageView = findViewById(R.id.image_view);
         mProgressBar = findViewById(R.id.progress_bar);
+        mButtonLogout = findViewById(R.id.button_logout);
 
         mStorageRef = FirebaseStorage.getInstance().getReference("images");
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("images");
@@ -87,6 +89,17 @@ public class UserActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 openImagesActivity();
+            }
+        });
+        mButtonLogout.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v)
+            {
+                firebaseAuth = FirebaseAuth.getInstance();
+                firebaseAuth.signOut();
+
+                finish();
+                openLoginActivity();
             }
         });
     }
@@ -169,6 +182,11 @@ public class UserActivity extends AppCompatActivity {
     private void openImagesActivity()
     {
         Intent intent = new Intent(this, PhotoActivity.class);
+        startActivity(intent);
+    }
+    private void openLoginActivity()
+    {
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
 }
