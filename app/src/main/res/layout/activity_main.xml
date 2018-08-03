@@ -35,6 +35,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <CheckBox
+            android:id="@+id/expertCheckboxRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ExpertUser"
+            tools:layout_editor_absoluteX="42dp"
+            tools:layout_editor_absoluteY="316dp" />
+
         <Button
             android:layout_margin="15dp"
             android:id="@+id/buttonRegister"
@@ -49,4 +57,5 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>

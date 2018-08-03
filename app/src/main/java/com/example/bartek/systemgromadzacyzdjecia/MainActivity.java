@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -17,16 +18,24 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener
 {
-
+    private CheckBox expertCheckbox;
     private Button buttonRegister;
     private EditText editTextEmail;
     private EditText editTextPassword;
     private TextView textViewSignIn;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
+    private DatabaseReference databaseReference;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -41,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(new Intent(getApplicationContext(), PhotoActivity.class));
         }
 
-
+        expertCheckbox = findViewById(R.id.expertCheckboxRegister);
         progressDialog = new ProgressDialog(this);
 
         buttonRegister = (Button) findViewById(R.id.buttonRegister);
@@ -51,11 +60,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         buttonRegister.setOnClickListener(this);
         textViewSignIn.setOnClickListener(this);
+
+        databaseReference = FirebaseDatabase.getInstance().getReference();
     }
 
-    private void registerUser()
+    private void registerUser(final boolean expert)
     {
-        String email = editTextEmail.getText().toString().trim();
+        final String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
 
         if (TextUtils.isEmpty(email))
@@ -68,6 +79,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this,"Please enter password",Toast.LENGTH_SHORT).show();
             return;
         }
+
+
+
+
         progressDialog.setMessage("Registering User...");
         progressDialog.show();
 
@@ -78,9 +93,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         progressDialog.dismiss();
                         if (task.isSuccessful())
                         {
-
-                                finish();
+                            UpdateUserStart(expert, email, FirebaseAuth.getInstance().getCurrentUser().getUid());
+                            finish();
+                            if (expert)
+                            {
+                                //startActivity(new Intent(getApplicationContext(), PhotoActivity.class));
+                            }
+                            else
+                            {
                                 startActivity(new Intent(getApplicationContext(), PhotoActivity.class));
+                            }
+
 
                         }
                         else
@@ -89,18 +112,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
                     }
                 });
-
     }
+
+    private void UpdateUserStart(boolean userExpertState, String email, String uid)
+    {
+        String fixedEmail = email.replaceAll(Pattern.quote("."),"");
+        UserState US = new UserState(userExpertState, email);
+        DatabaseReference mDatabase = databaseReference.getRoot();
+        Map<String, Object> postValues = US.toMap();
+        //String key = mDatabase.child("posts").push().getKey();
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/Information/" + uid, postValues);
+        mDatabase.updateChildren(childUpdates);
+    }
+
     @Override
     public void onClick(View v)
     {
         if (v == buttonRegister)
         {
-            registerUser();
+            registerUser(expertCheckbox.isChecked());
         }
         if (v == textViewSignIn)
         {
             startActivity(new Intent(this,LoginActivity.class));
         }
     }
+
+
 }

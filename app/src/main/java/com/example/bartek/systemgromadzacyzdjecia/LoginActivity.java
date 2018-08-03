@@ -14,8 +14,16 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseError;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener
 {
@@ -27,6 +35,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private ProgressDialog progressDialog;
 
     private FirebaseAuth firebaseAuth;
+    private DatabaseReference databaseReference;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -49,11 +58,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         buttonSignIn.setOnClickListener(this);
         textViewSignUp.setOnClickListener(this);
+        databaseReference = FirebaseDatabase.getInstance().getReference();
     }
 
     private void userLogin()
     {
-        String email = editTextEmail.getText().toString().trim();
+        final String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
 
         if (TextUtils.isEmpty(email))
@@ -78,10 +88,25 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         progressDialog.dismiss();
                         if(task.isSuccessful())
                         {
-                            finish();
-                            startActivity(new Intent(getApplicationContext(), PhotoActivity.class));
-                        }
+                            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    UserState US = dataSnapshot.child("Information").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).getValue(UserState.class);
+                                    if (US.expert)
+                                    {
 
+                                    }
+                                    else
+                                    {
+                                        finish();
+                                        startActivity(new Intent(getApplicationContext(), PhotoActivity.class));
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {}
+                            });
+                        }
                     }
                 });
     }
