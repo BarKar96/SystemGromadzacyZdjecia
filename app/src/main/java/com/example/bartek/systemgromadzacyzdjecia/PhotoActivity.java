@@ -1,6 +1,7 @@
 package com.example.bartek.systemgromadzacyzdjecia;
 
 import android.content.Intent;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,54 +14,86 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 
-public class PhotoActivity extends AppCompatActivity implements View.OnClickListener
-{
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
-    private FirebaseAuth firebaseAuth;
-    private Button buttonLogout,buttonAddPhoto;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
+public class PhotoActivity extends AppCompatActivity implements ImageAdapter.OnItemClickListener {
+    private RecyclerView mRecyclerView;
+    private ImageAdapter mAdapter;
+
+    private ProgressBar mProgressCircle;
+
+    private DatabaseReference mDatabaseRef;
+    private List<Upload> mUploads;
+
+    public static Upload upload;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
 
-        firebaseAuth =  FirebaseAuth.getInstance();
+        mRecyclerView = findViewById(R.id.recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        mProgressCircle = findViewById(R.id.progress_circle);
 
+        mUploads = new ArrayList<>();
 
-        if (firebaseAuth.getCurrentUser() == null)
-        {
-            finish();
-            startActivity(new Intent(this,LoginActivity.class));
-        }
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference("images");
 
-        FirebaseUser user = firebaseAuth.getCurrentUser();
+        mDatabaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    Upload upload = postSnapshot.getValue(Upload.class);
+                    mUploads.add(upload);
+                }
 
+                mAdapter = new ImageAdapter(PhotoActivity.this, mUploads);
 
+                mRecyclerView.setAdapter(mAdapter);
+                mAdapter.setOnItemClickListener(PhotoActivity.this);
+                mProgressCircle.setVisibility(View.INVISIBLE);
+            }
 
-        buttonLogout = (Button) findViewById(R.id.buttonLogout);
-        buttonAddPhoto = (Button) findViewById(R.id.buttonAddPhoto);
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(PhotoActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                mProgressCircle.setVisibility(View.INVISIBLE);
+            }
+        });
+    }
 
-        buttonLogout.setOnClickListener(this);
-        buttonAddPhoto.setOnClickListener(this);
+    @Override
+    public void onItemClick(int position) {
+        upload = mUploads.get(position);
+        finish();
+        startActivity(new Intent(this, PhotoReview.class));
+    }
 
+    @Override
+    public void onWhatEverClick(int position) {
 
     }
 
     @Override
-    public void onClick(View v) {
-        if (v == buttonLogout)
-        {
-            firebaseAuth.signOut();
-            finish();
-            startActivity(new Intent(this,LoginActivity.class));
-        }
-        if (v == buttonAddPhoto)
-        {
-            finish();
-            startActivity(new Intent(this,UserActivity.class));
-        }
+    public void onDeleteClick(int position) {
+
     }
 }
