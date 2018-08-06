@@ -26,6 +26,8 @@ public class ExpertHomeActivity extends AppCompatActivity implements View.OnClic
     private Button logoutButton;
     private DatabaseReference databaseReference;
 
+    public static String chosenEmail;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {

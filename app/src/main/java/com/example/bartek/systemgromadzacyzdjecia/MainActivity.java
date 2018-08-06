@@ -80,9 +80,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-
-
-
         progressDialog.setMessage("Registering User...");
         progressDialog.show();
 

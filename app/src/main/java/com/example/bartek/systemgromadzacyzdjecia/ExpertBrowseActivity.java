@@ -1,19 +1,5 @@
 package com.example.bartek.systemgromadzacyzdjecia;
 
-import android.content.Intent;
-import android.provider.ContactsContract;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-
-
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,6 +8,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,7 +18,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PhotoActivity extends AppCompatActivity implements ImageAdapter.OnItemClickListener {
+public class ExpertBrowseActivity extends AppCompatActivity implements ImageAdapter.OnItemClickListener {
+
     private RecyclerView mRecyclerView;
     private ImageAdapter mAdapter;
 
@@ -40,12 +28,10 @@ public class PhotoActivity extends AppCompatActivity implements ImageAdapter.OnI
     private DatabaseReference mDatabaseRef;
     private List<Upload> mUploads;
 
-    public static Upload upload;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_photo);
+        setContentView(R.layout.activity_expert_browse);
 
         mRecyclerView = findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
@@ -62,8 +48,8 @@ public class PhotoActivity extends AppCompatActivity implements ImageAdapter.OnI
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     Upload upload = postSnapshot.getValue(Upload.class);
-                    if (FirebaseAuth.getInstance().getCurrentUser().getEmail().equals(upload.getEmail())){
-                    mUploads.add(upload); };
+                    if (ExpertHomeActivity.chosenEmail.equals(upload.getEmail())){
+                        mUploads.add(upload); };
                 }
 
                 try {
@@ -72,26 +58,26 @@ public class PhotoActivity extends AppCompatActivity implements ImageAdapter.OnI
                     e.printStackTrace();
                 }
 
-                mAdapter = new ImageAdapter(PhotoActivity.this, mUploads);
+                mAdapter = new ImageAdapter(ExpertBrowseActivity.this, mUploads);
 
                 mRecyclerView.setAdapter(mAdapter);
-                mAdapter.setOnItemClickListener(PhotoActivity.this);
+                mAdapter.setOnItemClickListener(ExpertBrowseActivity.this);
                 mProgressCircle.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(PhotoActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(ExpertBrowseActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
                 mProgressCircle.setVisibility(View.INVISIBLE);
             }
         });
+
     }
+
 
     @Override
     public void onItemClick(int position) {
-        upload = mUploads.get(position);
-        finish();
-        startActivity(new Intent(this, PhotoReview.class));
+
     }
 
     @Override

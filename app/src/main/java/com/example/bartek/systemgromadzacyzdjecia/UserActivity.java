@@ -159,7 +159,7 @@ public class UserActivity extends AppCompatActivity {
                         Uri downloadUri = task.getResult();
                         String miUrlOk = downloadUri.toString();
 
-                        Upload upload = new Upload(mEditTextFileName.getText().toString().trim(), miUrlOk);
+                        Upload upload = new Upload(mEditTextFileName.getText().toString().trim(), miUrlOk, FirebaseAuth.getInstance().getCurrentUser().getEmail().trim());
                         String uploadId = mDatabaseRef.push().getKey();
                         mDatabaseRef.child(uploadId).setValue(upload);
                         Toast.makeText(UserActivity.this, "Image Uploaded", Toast.LENGTH_SHORT).show();
