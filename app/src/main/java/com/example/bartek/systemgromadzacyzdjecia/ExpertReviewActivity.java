@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 public class ExpertReviewActivity extends AppCompatActivity {
 
@@ -33,10 +34,11 @@ public class ExpertReviewActivity extends AppCompatActivity {
         back = findViewById(R.id.button_back);
         publish = findViewById(R.id.button_publish);
         imageView = findViewById(R.id.image_view_review);
-        imageView.setImageURI(Uri.parse(ExpertBrowseActivity.imgURI));
+        //imageView.setImageURI(Uri.parse(ExpertBrowseActivity.imgURI));
         reviewActivity.setMovementMethod(new ScrollingMovementMethod());
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("images");
 
+        Picasso.get().load(ExpertBrowseActivity.upload.getImageUrl()).into(imageView);
     }
 
     public void buttonHandler(View target) {

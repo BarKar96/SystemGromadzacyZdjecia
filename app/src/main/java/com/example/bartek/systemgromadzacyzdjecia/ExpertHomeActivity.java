@@ -61,7 +61,7 @@ public class ExpertHomeActivity extends AppCompatActivity implements View.OnClic
     private void initRecyclerView()
     {
         try {
-            Thread.sleep(1000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

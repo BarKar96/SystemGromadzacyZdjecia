@@ -32,6 +32,8 @@ public class ExpertBrowseActivity extends AppCompatActivity implements ImageAdap
     public static String imgName;
     public static String imgURI;
 
+    public static Upload upload;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +54,7 @@ public class ExpertBrowseActivity extends AppCompatActivity implements ImageAdap
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     Upload upload = postSnapshot.getValue(Upload.class);
+
                     if (ExpertHomeActivity.chosenEmail.equals(upload.getEmail())){
                         mUploads.add(upload); };
                 }
@@ -80,6 +83,7 @@ public class ExpertBrowseActivity extends AppCompatActivity implements ImageAdap
 
     @Override
     public void onItemClick(int position) {
+        upload = mUploads.get(position);
         imgName = mUploads.get(position).getName();
         imgURI = mUploads.get(position).getImageUrl();
         finish();
