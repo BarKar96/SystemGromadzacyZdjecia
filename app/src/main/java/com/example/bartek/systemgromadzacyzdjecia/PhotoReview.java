@@ -31,6 +31,7 @@ public class PhotoReview extends AppCompatActivity implements View.OnClickListen
         btnBack.setOnClickListener(this);
         textViewName.setText(PhotoActivity.upload.getName());
         Picasso.get().load(PhotoActivity.upload.getImageUrl()).into(img);
+        textViewReview.setText(PhotoActivity.review);
     }
 
     @Override

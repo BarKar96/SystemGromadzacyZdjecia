@@ -42,6 +42,8 @@ public class PhotoActivity extends AppCompatActivity implements ImageAdapter.OnI
 
     public static Upload upload;
 
+    public static String review;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +92,7 @@ public class PhotoActivity extends AppCompatActivity implements ImageAdapter.OnI
     @Override
     public void onItemClick(int position) {
         upload = mUploads.get(position);
+        review = mUploads.get(position).getReview();
         finish();
         startActivity(new Intent(this, PhotoReview.class));
     }
