@@ -24,7 +24,8 @@
         <activity android:name=".UserActivity" />
         <activity android:name=".ExpertHomeActivity" />
         <activity android:name=".PhotoReview" />
-        <activity android:name=".ExpertBrowseActivity"></activity>
+        <activity android:name=".ExpertBrowseActivity" />
+        <activity android:name=".ExpertReviewActivity"></activity>
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 package com.example.bartek.systemgromadzacyzdjecia;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,6 +29,9 @@ public class ExpertBrowseActivity extends AppCompatActivity implements ImageAdap
     private DatabaseReference mDatabaseRef;
     private List<Upload> mUploads;
 
+    public static String imgName;
+    public static String imgURI;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +55,6 @@ public class ExpertBrowseActivity extends AppCompatActivity implements ImageAdap
                     if (ExpertHomeActivity.chosenEmail.equals(upload.getEmail())){
                         mUploads.add(upload); };
                 }
-
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -77,9 +80,11 @@ public class ExpertBrowseActivity extends AppCompatActivity implements ImageAdap
 
     @Override
     public void onItemClick(int position) {
-
+        imgName = mUploads.get(position).getName();
+        imgURI = mUploads.get(position).getImageUrl();
+        finish();
+        startActivity(new Intent(this, ExpertReviewActivity.class));
     }
-
     @Override
     public void onWhatEverClick(int position) {
 

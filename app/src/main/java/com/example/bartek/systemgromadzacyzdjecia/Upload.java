@@ -4,7 +4,7 @@ public class Upload {
     private String mName;
     private String mEmail;
     private String mImageUrl;
-
+    private String mReview;
 
     public Upload() {
         //empty constructor needed
@@ -18,7 +18,12 @@ public class Upload {
         mName = name;
         mImageUrl = imageUrl;
         mEmail = email;
+        mReview = "No review Yet";
     }
+
+    public String getReview() {return mReview; }
+
+    public void setReview(String review) { mReview = review; }
 
     public String getName() {
         return mName;
