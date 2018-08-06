@@ -97,14 +97,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             finish();
                             if (expert)
                             {
-                                //startActivity(new Intent(getApplicationContext(), PhotoActivity.class));
+                                startActivity(new Intent(getApplicationContext(), ExpertHomeActivity.class));
                             }
                             else
                             {
-                                startActivity(new Intent(getApplicationContext(), PhotoActivity.class));
+                                startActivity(new Intent(getApplicationContext(), UserActivity.class));
                             }
-
-
                         }
                         else
                         {

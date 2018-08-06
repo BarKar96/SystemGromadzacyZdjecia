@@ -90,7 +90,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         HideKeyboard();
                                         startActivity(new Intent(getApplicationContext(), ExpertHomeActivity.class));
                                     } else {
-                                        startActivity(new Intent(getApplicationContext(), PhotoActivity.class));
+                                        startActivity(new Intent(getApplicationContext(), UserActivity.class));
                                     }
                                 }
 
