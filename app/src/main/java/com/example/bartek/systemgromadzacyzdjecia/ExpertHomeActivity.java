@@ -58,6 +58,11 @@ public class ExpertHomeActivity extends AppCompatActivity implements View.OnClic
 
     private void initRecyclerView()
     {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         ExpertHomeAdapter adapter = new ExpertHomeAdapter(list, this);
         recyclerView.setAdapter(adapter);
@@ -67,10 +72,24 @@ public class ExpertHomeActivity extends AppCompatActivity implements View.OnClic
     private void PrepareTexts()
     {
         list = new ArrayList<>();
-        for (int i=0; i<20;i++)
-        {
-            list.add("texxxxxt" + i);
-        }
+        DatabaseReference databaseReference2 = databaseReference.getRoot().child("Information");
+        databaseReference2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshotParent) {
+                for (DataSnapshot dataSnapshot : dataSnapshotParent.getChildren())
+                {
+                    UserState US = dataSnapshot.getValue(UserState.class);
+                    if (!US.expert)
+                    {
+                        list.add(US.email);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
     }
 
     @Override

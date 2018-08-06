@@ -43,10 +43,9 @@ public class ExpertHomeAdapter extends RecyclerView.Adapter<ExpertHomeAdapter.Vi
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "Great toast", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, list.get(position), Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 
     @Override
