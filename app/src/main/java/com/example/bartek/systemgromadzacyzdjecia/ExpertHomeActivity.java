@@ -7,8 +7,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +24,7 @@ public class ExpertHomeActivity extends AppCompatActivity implements View.OnClic
     private List<String> list;
     private FirebaseAuth firebaseAuth;
     private Button logoutButton;
+    private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -27,8 +34,26 @@ public class ExpertHomeActivity extends AppCompatActivity implements View.OnClic
         firebaseAuth = FirebaseAuth.getInstance();
         logoutButton = findViewById(R.id.logoutButton);
         logoutButton.setOnClickListener(this);
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        PrepareWelcomeMessage();
         PrepareTexts();
         initRecyclerView();
+    }
+
+    private void PrepareWelcomeMessage()
+    {
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                UserState US = dataSnapshot.child("Information").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).getValue(UserState.class);
+                TextView helloTest = findViewById(R.id.HelloMessage);
+                helloTest.setText("Welcome " + US.email);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
     }
 
     private void initRecyclerView()
