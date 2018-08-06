@@ -44,12 +44,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         firebaseAuth = firebaseAuth.getInstance();
 
-        if (firebaseAuth.getCurrentUser() != null)
-        {
-            finish();
-            startActivity(new Intent(getApplicationContext(), UserActivity.class));
-        }
-
         expertCheckbox = findViewById(R.id.expertCheckboxRegister);
         progressDialog = new ProgressDialog(this);
 

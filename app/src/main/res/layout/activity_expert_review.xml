@@ -7,6 +7,16 @@
     tools:context=".ExpertReviewActivity">
 
 
+    <EditText
+        android:id="@+id/review_text"
+        android:layout_width="match_parent"
+        android:layout_height="260dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/image_view_review"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="" />
+
     <TextView
         android:id="@+id/textViewName"
         android:layout_width="match_parent"
@@ -47,28 +57,6 @@
         android:layout_margin="10dp"
         android:text="Publish"
         android:onClick="buttonHandler"/>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="262dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <EditText
-                android:id="@+id/review_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text="" />
-        </LinearLayout>
-    </ScrollView>
 
 
 </RelativeLayout>
