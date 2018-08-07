@@ -11,6 +11,7 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -39,6 +40,7 @@ public class UserActivity extends AppCompatActivity {
     private Button mButtonChooseImage;
     private Button mButtonLogout;
     private Button mButtonUpload;
+    private ImageButton mButtonInfo;
     private TextView mTextViewShowUploads;
     private EditText mEditTextFileName;
     private ImageView mImageView;
@@ -63,7 +65,7 @@ public class UserActivity extends AppCompatActivity {
         mImageView = findViewById(R.id.image_view);
         mProgressBar = findViewById(R.id.progress_bar);
         mButtonLogout = findViewById(R.id.button_logout);
-
+        mButtonInfo = findViewById(R.id.button_info);
         mStorageRef = FirebaseStorage.getInstance().getReference("images");
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("images");
 
@@ -102,6 +104,12 @@ public class UserActivity extends AppCompatActivity {
                 openLoginActivity();
             }
         });
+        mButtonInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                Toast.makeText(UserActivity.this, "Choose and upload photo of your tongue!", Toast.LENGTH_SHORT).show();
+            }});
     }
 
     private void openFileChooser() {
